@@ -1,5 +1,8 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:prayk_list/Screens/Store.dart';
 
 void main() => runApp(const AppBarApp());
 
@@ -9,27 +12,66 @@ class AppBarApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: AppBarExample(),
+      home: HomePage(),
       debugShowCheckedModeBanner: false,
     );
   }
 }
 
-class AppBarExample extends StatelessWidget {
-  const AppBarExample({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
 
+
+
+class _HomePageState extends State<HomePage> {
+  int _selectedIndex = 0;
+  int _currentIndex = 0;
+  bool isPressed = false;
+  bool isPressed1 = false;
+
+  IconData inop = Icons.add_ic_call;
+  final List<String> _banners = [
+    'assets/images/Banner.jpg',
+    'assets/images/Banner1.png',
+    'assets/images/Banner2.png',
+  ];
+
+  void _onNavTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+  final random = Random();
+  late final int eye_count;
+
+    
+  @override
+  void initState() {
+    super.initState();
+    eye_count = random.nextInt(45) + 5; // случайное число от 5 до 70
+  }
+    
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    
+   
+    
     return Scaffold(
-      // 🔹 Боковое меню
+      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+  
       drawer: Drawer(
         child: ListView(
+          
           padding: EdgeInsets.zero,
           children: const [
             DrawerHeader(
               decoration: BoxDecoration(color: Color.fromARGB(135, 35, 35, 35)),
               child: Text('Меню',
-                  style: TextStyle(color: Colors.white, fontSize: 24)),
+              style:  TextStyle(fontFamily: 'intel', fontWeight: FontWeight.bold,color: Colors.white, fontSize: 24)),
             ),
             ListTile(
               leading: Icon(Icons.home),
@@ -47,83 +89,562 @@ class AppBarExample extends StatelessWidget {
         ),
       ),
 
-      // 🔹 Кастомный верхний блок (заменяет AppBar)
-      body: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.only(top: 40, left: 16, right: 16, bottom: 10),
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.white,
-                ),
-              ],
-            ),
-            child: Column(
-              children: [
-                // 🔸 Логотип сверху
-                SvgPicture.asset(
-                  'assets/logo/logo.svg',
-                  height: 30,
-                ),
-                const SizedBox(height: 12),
-
-                // 🔸 Нижняя панель
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Builder(
-                      builder: (context) => IconButton(
-                        icon: const Icon(Icons.menu, color: Colors.black),
-                        onPressed: () => Scaffold.of(context).openDrawer(),
-                      ),
-                    ),
-                    // Поле поиска
-                    Expanded(
-                      child: Container(
-                        height: 36,
-                        margin: const EdgeInsets.symmetric(horizontal: 10),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(16),
-                          border: Border.all(
-                            color: const Color.fromARGB(255, 212, 211, 211), // 🔸 цвет рамки
-                            width: 1.5,         // 🔸 толщина рамки
-                          ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            // 🔹 Верхний блок с логотипом и поиском
+            Container(
+              padding: const EdgeInsets.only(top: 40, left: 16, right: 16, bottom: 10),
+              decoration: const BoxDecoration(color: Colors.white),
+              child: Column(
+                children: [
+                  SvgPicture.asset('assets/logo/logo.svg', height: 30),
+                  const SizedBox(height: 12),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Builder(
+                        builder: (context) => IconButton(
+                          icon: const Icon(Icons.menu, color: Colors.black),
+                          onPressed: () => Scaffold.of(context).openDrawer(),
                         ),
-                        child: const TextField(
-                          decoration: InputDecoration(
-                            hintText: "Search...",
-                            hintStyle: TextStyle(color: Colors.grey),
-                            border: InputBorder.none,
-                            prefixIcon: Icon(Icons.search, color: Colors.grey),
+                      ),
+                      Expanded(
+                        child: Container(
+                          height: 36,
+                          margin: const EdgeInsets.symmetric(horizontal: 10),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(
+                              color: const Color.fromARGB(255, 212, 211, 211),
+                              width: 1,
+                            ),
+                          ),
+                          child: const TextField(
+                            decoration: InputDecoration(
+                              hintText: "Search",
+                              hintStyle: TextStyle(color: Colors.grey),
+                              border: InputBorder.none,
+                              prefixIcon: Icon(Icons.search, color: Colors.grey),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    // Профиль
-                    SvgPicture.asset(
-                      'assets/logo/notific.svg',
-                      height: 30,
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-
-          // 🔹 Основное содержимое
-          const Expanded(
-            child: Center(
-              child: Text(
-                'Главная страница',
-                style: TextStyle(fontSize: 20),
+                      SvgPicture.asset('assets/logo/notific.svg', height: 30),
+                    ],
+                  ),
+                ],
               ),
             ),
-          ),
-        ],
-      ),
-    );
+            // SizedBox(width: 16,),
+            // 🔹 Горизонтальная полоса с иконками
+            SingleChildScrollView(
+              padding: const EdgeInsets.only(bottom: 10, left: 16,right: 16),
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: List.generate(
+                  8,
+                  (index) => Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
+                    child: Image.asset('assets/images/history.jpg',
+                        width: 70, height: 70),
+                  ),
+                ),
+              ),
+            ),
+            Stack(
+              alignment: Alignment.bottomCenter,children: [            
+                CarouselSlider.builder(
+                  itemCount: _banners.length,
+                  itemBuilder: (context, index, realIndex) {
+                    return ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Image.asset(
+                        _banners[index],
+                        width: screenWidth,
+                        fit: BoxFit.cover,
+                      ),
+                    );
+                  },
+                  options: CarouselOptions(
+                    height: 100,
+                    autoPlay: true,
+                    viewportFraction: 0.9, // немного отступов по бокам
+                    enlargeCenterPage: true, // выделяет активный баннер
+                    autoPlayInterval: const Duration(seconds: 3),
+                    onPageChanged: (index, reason) {
+                      setState(() => _currentIndex = index);
+                    },
+                  ),
+                ),
+
+                Positioned(
+                  bottom: 14, 
+                  child: Row(                  
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: _banners.asMap().entries.map((entry) {
+                      return Container(
+                        width: 4,
+                        height: 4,
+                        margin: const EdgeInsets.symmetric(horizontal: 3),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: _currentIndex == entry.key
+                              ? Colors.white
+                              : Colors.grey.shade500,
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                )
+              ]
+            ),
+            SizedBox(height: 10,),
+
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  SizedBox(width: 10),
+                  ElevatedButton(
+                    onPressed: () async {
+                      showModalBottomSheet(   
+                        context: context,
+                        backgroundColor: Colors.white,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                        ),
+                        builder: (BuildContext context) {
+                          return Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min, 
+                              children: [
+                                const Text(
+                                  'ALL',
+                                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                ),
+                                const SizedBox(height: 10),
+                                ListTile(
+                                  title: const Text('Buy'),
+                                  onTap: () {
+                                    Navigator.pop(context); 
+                                  },
+                                ),
+                                ListTile(
+                                  title: const Text('Sell'),
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                                ListTile(
+                                  title: const Text('Give free'),
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                                ListTile(
+                                  title: const Text('Market'),
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                                ListTile(
+                                  title: const Text('service'),
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                                Container(
+                                  height: 10,
+                                  width: screenWidth,
+                                  color: Colors.amber                 
+                                  ),
+                                ListTile(
+                                  title: const Text('Close', style: TextStyle(color: Colors.red)),
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      foregroundColor: Colors.black,
+                      elevation: 0,
+                      side: const BorderSide(color: Colors.grey, width: 1),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children:[
+                        Row(
+                          children: [
+                            Text("All  "),    
+                            SvgPicture.asset('assets/svg/Down.svg', height: 30),              
+                          ], 
+                        )
+                      ],
+                    ),
+                  ),
+
+                  SizedBox(width: 5),
+                  
+                  ElevatedButton(
+                    onPressed: () {
+                      showModalBottomSheet(   
+                        context: context,
+                        backgroundColor: Colors.white,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+                        ),
+                        builder: (BuildContext context) {
+                          return Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min, 
+                              children: [
+                                const Text(
+                                  'Condition',
+                                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                ),
+                                const SizedBox(height: 10),
+                                ListTile(
+                                  title: const Text('Color'),
+                                  onTap: () {
+                                    Navigator.pop(context); 
+                                  },
+                                ),
+                                ListTile(
+                                  title: const Text('Sound'),
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                                ListTile(
+                                  title: const Text('Variable'),
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                                ListTile(
+                                  title: const Text('shape'),
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                                Container(
+                                  height: 10,
+                                  width: screenWidth,
+                                  color: Colors.amber                 
+                                  ),
+                                ListTile(
+                                  title: const Text('Close', style: TextStyle(color: Colors.red)),
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      foregroundColor: Colors.black,
+                      elevation: 0,
+                      side: const BorderSide(color: Colors.grey, width: 1),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Row(
+                          children: [
+                            Text("Condition  "),
+                            SvgPicture.asset('assets/svg/Down.svg', height: 30),  
+                          ], 
+                          )
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 5),
+                                    
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        isPressed = !isPressed;
+                      });
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      foregroundColor: Colors.black,
+                      elevation: 0,
+                      side:isPressed ? BorderSide(color: Colors.red, width: 1):BorderSide(color: Colors.grey, width: 1),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                    child: Text(isPressed ? "Kredit   X" : "Kredit", style: TextStyle(color: isPressed ? Colors.red:Colors.black),),
+                  ),
+
+                  const SizedBox(width: 5),
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        isPressed1 = !isPressed1;
+                      });
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      foregroundColor: Colors.black,
+                      side: isPressed1 ? BorderSide(color: Colors.red, width: 1): BorderSide(color: Colors.grey, width: 1),
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children:  [
+                        Text(isPressed1 ? "Delivery   X": "Delivery", style: TextStyle(color: isPressed1 ? Colors.red : Colors.black), ),
+                        SizedBox(width: 5),
+                        
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 10),
+            GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              padding: const EdgeInsets.all(10),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2, // 2 по горизонтали
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+                childAspectRatio: 0.65,
+              ),
+              itemCount: 19,
+              itemBuilder: (context, index) {
+                return Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: Colors.white,
+                    border: Border.all(color: Colors.grey.shade300, width: 1), 
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start, // 🔹 выравниваем всё по левому краю
+                    children: [
+                      
+                      Stack(
+                        children: [
+                          // 1️⃣ Основное изображение
+                          ClipRRect(
+                            borderRadius:  BorderRadius.circular(12),
+                            child: Image.asset(
+                              'assets/images/Card.jpg',
+                              fit: BoxFit.cover,
+                              width: double.infinity,
+                              height: 150,
+                            ),
+                          ),
+
+                          // 2️⃣ Первый блок (сверху-слева)
+                          Positioned(
+                            bottom: 10,
+                            left: 10,
+                            height: 30,
+                            child: Container(
+                              padding: const EdgeInsets.all(6),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFFF0600),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: const Text(
+                                "Sells",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 10,
+                            right: 10,
+                            child: Container(
+                              // height: 30,
+                              padding: const EdgeInsets.only(right: 4,left: 4,top: 1,bottom:1),
+                              decoration: BoxDecoration(
+                                color: Colors.black.withOpacity(0.35),
+                                borderRadius: BorderRadius.circular(11),
+                              ),
+                              child: 
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.remove_red_eye_outlined ,color: Colors.white ,size: 17,),
+                                  Text(" $eye_count",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold ),),
+                                ] 
+                              )
+                            ),
+                          ),
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start, // 🔹 всё влево
+                                children: const [
+                                  SizedBox(height: 5),
+                                  Text("Yesterday"),
+                                  Row(children:[Text(
+                                    "12 000 ₸",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.redAccent,
+                                    ),
+                                  ),
+                                  SizedBox(width:10),
+                                  Text(
+                                    "18 000 ₸",
+                                    style: TextStyle(
+                                      color: Colors.grey,
+                                      decoration: TextDecoration.lineThrough,
+                                    ),
+                                  ),]),
+                                  SizedBox(height: 6),
+                                  Text(
+                                    "Sells a new sweater from Qazaq Republic",
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(fontSize: 13),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            PopupMenuButton<String>(
+                              color: Colors.white,
+                              onSelected: (value) {
+                                print("You choise: $value");
+                              },
+                              itemBuilder: (context) => [
+                                const PopupMenuItem(value: 'edit', child: Text('Редактировать')),
+                                const PopupMenuItem(value: 'delete', child: Text('Удалить')),
+                                const PopupMenuItem(value: 'share', child: Text('Поделиться')),
+                                const PopupMenuItem(value: 'Add in Favorite', child: Text('Добавить в избранные')),
+                                const PopupMenuItem(value: 'Hide', child: Text('Скрыть')),
+                              ],
+                              child: const Icon(Icons.more_vert), 
+                            )
+
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                bottomNavigationBar: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.3),
+                        blurRadius: 6,
+                        offset: const Offset(0, -3),
+                      ),
+                    ],
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 25),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        _buildNavItem(Icons.home_outlined, Icons.home, 0),
+                        _buildNavItem(Icons.storefront_outlined, Icons.storefront_rounded, 1,),
+                        _buildNavItem(Icons.add_circle_outline, Icons.add_circle_rounded, 2),
+                        _buildNavItem(Icons.message_outlined, Icons.message_rounded, 3),
+                        _buildNavItem(Icons.account_circle_outlined, Icons.account_circle, 4),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            }
+
+            // 🔸 Отдельный метод для создания кнопок навигации
+            Widget _buildNavItem(IconData icon,IconData selectedIcon ,int index) {
+              bool isSelected = _selectedIndex == index;
+
+              return GestureDetector(
+                onTap: () {
+                  _onNavTapped(index);
+
+                  if (index == 0) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const HomePage()),
+                    );
+                  }
+                  else if (index == 1) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const Store()),
+                    );
+                  }
+                  else if (index == 3) {
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(builder: (context) => const Store()),
+                    // );
+                  }
+                  else {
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(builder: (context) => const Store()),
+                    // );
+                  }
+                },
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(
+                    // color: isSelected ? const Color.fromARGB(255, 193, 25, 10) : Colors.transparent,// цвет вокруг иконки
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        isSelected ? selectedIcon : icon, // 🔹 вот тут главное изменение
+                        color: isSelected ? Colors.black : Colors.black,
+                        size: 28, // (добавил чуть больше размер)
+                      ),
+                      const SizedBox(height: 4),
+                      
+                    ],
+                  )
+                )
+              );
   }
 }
