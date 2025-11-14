@@ -31,7 +31,28 @@ class _ItemInfoState extends State<ItemInfo> {
               ),
           ]),
         ),
-        actions: const [Icon(Icons.more_vert_outlined)],
+        actions: [
+        
+        
+        
+        PopupMenuButton<String>(
+                  color: Colors.white,
+                  onSelected: (value) {
+                    print("You choise: $value");
+                  },
+                  itemBuilder: (context) => [
+                    const PopupMenuItem(value: 'edit', child: Text('Редактировать')),
+                    const PopupMenuItem(value: 'delete', child: Text('Удалить')),
+                    const PopupMenuItem(value: 'share', child: Text('Поделиться')),
+                    const PopupMenuItem(value: 'Add in Favorite', child: Text('Добавить в избранные')),
+                    const PopupMenuItem(value: 'Hide', child: Text('Скрыть')),
+                  ],
+                  child: const Icon(Icons.more_vert), 
+                )
+        
+        
+        ]
+        ,
       ),
       body: 
       SingleChildScrollView(
