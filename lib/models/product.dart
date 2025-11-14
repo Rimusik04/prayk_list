@@ -1,5 +1,5 @@
 class Product{
-  final String image;
+  final String images;
   final String time;
   final int price;
   final int decount;
@@ -7,7 +7,7 @@ class Product{
 
 
   Product({
-    required this.image,
+    required this.images,
     required this.time,
     required this.price,
     required this.decount,

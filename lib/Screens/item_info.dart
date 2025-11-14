@@ -39,7 +39,7 @@ class _ItemInfoState extends State<ItemInfo> {
           children: [
             Container(child:
               Image.asset(
-                product.image,
+                product.images,
                 width: double.infinity,
                 height: 250,
                 fit: BoxFit.cover,
