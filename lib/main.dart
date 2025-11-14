@@ -1,8 +1,30 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:prayk_list/Screens/Store.dart';
+import 'package:prayk_list/Screens/store.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'models/product.dart';
+import 'dart:convert';
+import 'Screens/item_info.dart';
+
+import 'package:flutter/services.dart' show rootBundle;
+
+Future<List<Product>> loadProducts() async {
+  final String jsonString = await rootBundle.loadString('assets/JSON_s/product_json.json');//джсон пока не работает 
+  final List<dynamic> jsonData = json.decode(jsonString);
+
+  return jsonData.map((item) {
+    return Product(
+      image: item['image'],
+      time: item['time'],
+      price: item['price'],
+      decount: item['decount'],
+      description: item['description'],
+    );
+  }).toList();
+}
+
+
 
 void main() => runApp(const AppBarApp());
 
@@ -11,9 +33,15 @@ class AppBarApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
+      theme: ThemeData(
+        textTheme: GoogleFonts.robotoTextTheme(
+          Theme.of(context).textTheme,
+        ),
+      ),
       home: HomePage(),
       debugShowCheckedModeBanner: false,
+      
     );
   }
 }
@@ -32,7 +60,14 @@ class _HomePageState extends State<HomePage> {
   bool isPressed = false;
   bool isPressed1 = false;
 
-  IconData inop = Icons.add_ic_call;
+  late Future<List<Product>> productsFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    productsFuture = loadProducts();
+  }
+
   final List<String> _banners = [
     'assets/images/Banner.jpg',
     'assets/images/Banner1.png',
@@ -44,15 +79,83 @@ class _HomePageState extends State<HomePage> {
       _selectedIndex = index;
     });
   }
-  final random = Random();
-  late final int eye_count;
-
     
-  @override
-  void initState() {
-    super.initState();
-    eye_count = random.nextInt(45) + 5; // случайное число от 5 до 70
-  }
+  
+
+  final List<Product> products =  [
+    Product(
+      image: "assets/images/Card.jpg",
+      time: "today",
+      price: 120000,
+      decount:98000,
+      description: "Brand new sweater, size M.",
+      
+    ),
+    Product(
+      image: "assets/images/Card.jpg",
+      time: "2 mins ago",
+      price: 1000,
+      decount:800,
+      description: "Sells a new sweater from Qazaq Republic.",
+      
+    ),
+    Product(
+      image: "assets/images/Card.jpg",
+      time: "today",
+      price: 12000,
+      decount:10000,
+      description: "Brand new sweater, size M.",
+      
+    ),
+    Product(
+      image: "assets/images/Card.jpg",
+      time: "3 years ago",
+      price: 46000,
+      decount:12000,
+      description: "Sells a new sweater from Qazaq Republic.",
+      
+    ),
+    Product(
+      image: "assets/images/Card.jpg",
+      time: "yesterday",
+      price: 12000,
+      decount:16000,
+      description: "Sells a new sweater from Qazaq Republic.",
+      
+    ),
+    Product(
+      image: "assets/images/Card.jpg",
+      time: "yesterday",
+      price: 12000,
+      decount:16000,
+      description: "Sells a new sweater from Qazaq Republic.",
+      
+    ),
+    Product(
+      image: "assets/images/Card.jpg",
+      time: "yesterday",
+      price: 12000,
+      decount:16000,
+      description: "Sells a new sweater from Qazaq Republic.",
+      
+    ),
+    Product(
+      image: "assets/images/Card.jpg",
+      time: "yesterday",
+      price: 12000,
+      decount:16000,
+      description: "Sells a new sweater from Qazaq Republic.",
+      
+    ),
+    Product(
+      image: "assets/images/Card.jpg",
+      time: "yesterday",
+      price: 12000,
+      decount:16000,
+      description: "Sells a new sweater from Qazaq Republic.",
+      
+    ),
+  ];
     
   @override
   Widget build(BuildContext context) {
@@ -71,7 +174,7 @@ class _HomePageState extends State<HomePage> {
             DrawerHeader(
               decoration: BoxDecoration(color: Color.fromARGB(135, 35, 35, 35)),
               child: Text('Меню',
-              style:  TextStyle(fontFamily: 'intel', fontWeight: FontWeight.bold,color: Colors.white, fontSize: 24)),
+              style:  TextStyle( fontWeight: FontWeight.bold,color: Colors.white, fontSize: 24)),
             ),
             ListTile(
               leading: Icon(Icons.home),
@@ -111,7 +214,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       Expanded(
                         child: Container(
-                          height: 36,
+                          height: 32,
                           margin: const EdgeInsets.symmetric(horizontal: 10),
                           decoration: BoxDecoration(
                             color: Colors.white,
@@ -426,6 +529,8 @@ class _HomePageState extends State<HomePage> {
             ),
 
             const SizedBox(height: 10),
+
+
             GridView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -436,129 +541,20 @@ class _HomePageState extends State<HomePage> {
                 mainAxisSpacing: 10,
                 childAspectRatio: 0.65,
               ),
-              itemCount: 19,
+              itemCount: products.length,
               itemBuilder: (context, index) {
-                return Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: Colors.white,
-                    border: Border.all(color: Colors.grey.shade300, width: 1), 
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start, // 🔹 выравниваем всё по левому краю
-                    children: [
-                      
-                      Stack(
-                        children: [
-                          // 1️⃣ Основное изображение
-                          ClipRRect(
-                            borderRadius:  BorderRadius.circular(12),
-                            child: Image.asset(
-                              'assets/images/Card.jpg',
-                              fit: BoxFit.cover,
-                              width: double.infinity,
-                              height: 150,
-                            ),
-                          ),
-
-                          // 2️⃣ Первый блок (сверху-слева)
-                          Positioned(
-                            bottom: 10,
-                            left: 10,
-                            height: 30,
-                            child: Container(
-                              padding: const EdgeInsets.all(6),
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFFF0600),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: const Text(
-                                "Sells",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            bottom: 10,
-                            right: 10,
-                            child: Container(
-                              // height: 30,
-                              padding: const EdgeInsets.only(right: 4,left: 4,top: 1,bottom:1),
-                              decoration: BoxDecoration(
-                                color: Colors.black.withOpacity(0.35),
-                                borderRadius: BorderRadius.circular(11),
-                              ),
-                              child: 
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Icon(Icons.remove_red_eye_outlined ,color: Colors.white ,size: 17,),
-                                  Text(" $eye_count",style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold ),),
-                                ] 
-                              )
-                            ),
-                          ),
-                        ],
+                final product = products[index];
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ItemInfo(product: product),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start, // 🔹 всё влево
-                                children: const [
-                                  SizedBox(height: 5),
-                                  Text("Yesterday"),
-                                  Row(children:[Text(
-                                    "12 000 ₸",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.redAccent,
-                                    ),
-                                  ),
-                                  SizedBox(width:10),
-                                  Text(
-                                    "18 000 ₸",
-                                    style: TextStyle(
-                                      color: Colors.grey,
-                                      decoration: TextDecoration.lineThrough,
-                                    ),
-                                  ),]),
-                                  SizedBox(height: 6),
-                                  Text(
-                                    "Sells a new sweater from Qazaq Republic",
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(fontSize: 13),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            PopupMenuButton<String>(
-                              color: Colors.white,
-                              onSelected: (value) {
-                                print("You choise: $value");
-                              },
-                              itemBuilder: (context) => [
-                                const PopupMenuItem(value: 'edit', child: Text('Редактировать')),
-                                const PopupMenuItem(value: 'delete', child: Text('Удалить')),
-                                const PopupMenuItem(value: 'share', child: Text('Поделиться')),
-                                const PopupMenuItem(value: 'Add in Favorite', child: Text('Добавить в избранные')),
-                                const PopupMenuItem(value: 'Hide', child: Text('Скрыть')),
-                              ],
-                              child: const Icon(Icons.more_vert), 
-                            )
-
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-
+                    );
+                  },
+                  child: ProductCard(product: product),
+                );
                         },
                       ),
                     ],
@@ -646,5 +642,139 @@ class _HomePageState extends State<HomePage> {
                   )
                 )
               );
+              
+  }
+  
+}
+
+                
+
+class ProductCard extends StatelessWidget {
+  final Product product;
+
+  const ProductCard({super.key, required this.product});
+
+  @override
+  Widget build(BuildContext context) {
+
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: Colors.white,
+        border: Border.all(color: Colors.grey.shade300, width: 1), 
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Stack(
+            children: [
+              // 1️⃣ Основное изображение
+              ClipRRect(
+                borderRadius:  BorderRadius.circular(12),
+                child: Image.asset(
+                  product.image,
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                  height: 165,
+                ),
+              ),
+
+              // 2️⃣ Первый блок (сверху-слева)
+              Positioned(
+                bottom: 10,
+                left: 10,
+                height: 30,
+                child: Container(
+                  padding: const EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFF0600),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Text(
+                    "Sells",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+              Positioned(
+                bottom: 10,
+                right: 10,
+                child: Container(
+                  padding: const EdgeInsets.only(right: 4,left: 4,top: 1,bottom:1),
+                  decoration: BoxDecoration(
+                    color: Colors.black.withOpacity(0.35),
+                    borderRadius: BorderRadius.circular(11),
+                  ),
+                  child: 
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Icon(Icons.remove_red_eye_outlined ,color: Colors.white ,size: 17,),
+                      // Text(,style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold ),),
+                    ] 
+                  )
+                ),
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start, // 🔹 всё влево
+                    children:  [
+                      SizedBox(height: 5),
+                      Text(product.time),
+                      Row(children:[Text(
+                        product.price.toString(),
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.redAccent,
+                        ),
+                      ),
+                      SizedBox(width:10),
+                      Text(
+                        product.decount.toString(),
+                        style: TextStyle(
+                          color: Colors.grey,
+                          decoration: TextDecoration.lineThrough,
+                        ),
+                      ),]),
+                      SizedBox(height: 6),
+                      Text(
+                        product.description,
+                        maxLines: 2,               
+                        overflow: TextOverflow.ellipsis, 
+                        textAlign: TextAlign.start,
+                      ),
+                    ],
+                  ),
+                ),
+                PopupMenuButton<String>(
+                  color: Colors.white,
+                  onSelected: (value) {
+                    print("You choise: $value");
+                  },
+                  itemBuilder: (context) => [
+                    const PopupMenuItem(value: 'edit', child: Text('Редактировать')),
+                    const PopupMenuItem(value: 'delete', child: Text('Удалить')),
+                    const PopupMenuItem(value: 'share', child: Text('Поделиться')),
+                    const PopupMenuItem(value: 'Add in Favorite', child: Text('Добавить в избранные')),
+                    const PopupMenuItem(value: 'Hide', child: Text('Скрыть')),
+                  ],
+                  child: const Icon(Icons.more_vert), 
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
+
+

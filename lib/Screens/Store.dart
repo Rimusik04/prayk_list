@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'models/item_mod.dart';
+import '/models/item_mod.dart';
 import 'package:prayk_list/main.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 class Store extends StatefulWidget {
@@ -182,8 +182,8 @@ class _StoreState extends State<Store> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _buildNavItem(Icons.home_outlined, Icons.home, 0),
-              _buildNavItem(Icons.storefront_outlined, Icons.storefront_rounded, 1),
+              _buildNavItem(Icons.home_outlined, Icons.home, 1),
+              _buildNavItem(Icons.storefront_outlined, Icons.storefront_rounded, 0),
               _buildNavItem(Icons.add_circle_outline, Icons.add_circle_rounded, 2),
               _buildNavItem(Icons.message_outlined, Icons.message_rounded, 3),
               _buildNavItem(Icons.account_circle_outlined, Icons.account_circle, 4),
@@ -205,32 +205,43 @@ class _StoreState extends State<Store> {
       ],
     ),
     child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      // crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Expanded(
-          child: 
-            ClipOval(
-              child: Image.asset(
-                product.image,
-                fit: BoxFit.cover,
-                // width: double.infinity,
+          child: Center(
+            child:Container(
+              width: 150,
+              height: 150,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                image: DecorationImage(
+                  image: AssetImage(product.image),
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
+          )
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: Text(
-            product.description,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: const TextStyle(color: Colors.grey, fontSize: 12),
-          ),
+          child: 
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SvgPicture.asset('assets/svg/Star.svg', height: 20),               
+              SvgPicture.asset('assets/svg/Star.svg', height: 20),               
+              SvgPicture.asset('assets/svg/Star.svg', height: 20),               
+              SvgPicture.asset('assets/svg/Star.svg', height: 20),               
+              SvgPicture.asset('assets/svg/Star.svg', height: 20),       
+            ]        
+          )
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(
             product.name,
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+            
           ),
         ),
         SizedBox(height: 10,)
@@ -246,16 +257,16 @@ class _StoreState extends State<Store> {
       onTap: () {
         _onNavTapped(index);
 
-        if (index == 0) {
+        if (index == 1) {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const Store ()),
+            MaterialPageRoute(builder: (context) => const HomePage ()),
           );
         }
-        else if (index == 1) {
+        else if (index == 0) {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const HomePage()),
+            MaterialPageRoute(builder: (context) => const Store()),
           );
         }
         else if (index == 3) {
