@@ -1,5 +1,5 @@
 class Product{
-  final String images;
+  final List<String> images;
   final String time;
   final int price;
   final int decount;

@@ -67,7 +67,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     productsFuture = loadProducts();
   }
-
+  
   final List<String> _banners = [
     'assets/images/Banner.jpg',
     'assets/images/Banner1.png',
@@ -84,7 +84,7 @@ class _HomePageState extends State<HomePage> {
 
   final List<Product> products =  [
     Product(
-      images: "assets/images/Card.jpg",
+      images: ["assets/images/Card.jpg","assets/images/Card.jpg","assets/images/Card.jpg"],
       time: "today",
       price: 120000,
       decount:98000,
@@ -92,7 +92,7 @@ class _HomePageState extends State<HomePage> {
       
     ),
     Product(
-      images: "assets/images/Card.jpg",
+      images: ["assets/images/Card.jpg","assets/images/Card.jpg","assets/images/Card.jpg"],
       time: "2 mins ago",
       price: 1000,
       decount:800,
@@ -100,7 +100,7 @@ class _HomePageState extends State<HomePage> {
       
     ),
     Product(
-      images: "assets/images/Card.jpg",
+      images: ["assets/images/Card.jpg","assets/images/Card.jpg","assets/images/Card.jpg"],
       time: "today",
       price: 12000,
       decount:10000,
@@ -108,7 +108,7 @@ class _HomePageState extends State<HomePage> {
       
     ),
     Product(
-      images: "assets/images/Card.jpg",
+      images: ["assets/images/Card.jpg","assets/images/Card.jpg","assets/images/Card.jpg"],
       time: "3 years ago",
       price: 46000,
       decount:12000,
@@ -116,7 +116,7 @@ class _HomePageState extends State<HomePage> {
       
     ),
     Product(
-      images: "assets/images/Card.jpg",
+      images: ["assets/images/Card.jpg","assets/images/Card.jpg","assets/images/Card.jpg"],
       time: "yesterday",
       price: 12000,
       decount:16000,
@@ -124,7 +124,7 @@ class _HomePageState extends State<HomePage> {
       
     ),
     Product(
-      images: "assets/images/Card.jpg",
+      images: ["assets/images/Card.jpg","assets/images/Card.jpg","assets/images/Card.jpg"],
       time: "yesterday",
       price: 12000,
       decount:16000,
@@ -132,7 +132,7 @@ class _HomePageState extends State<HomePage> {
       
     ),
     Product(
-      images: "assets/images/Card.jpg",
+      images: ["assets/images/Card.jpg","assets/images/Card.jpg","assets/images/Card.jpg"],
       time: "yesterday",
       price: 12000,
       decount:16000,
@@ -140,7 +140,7 @@ class _HomePageState extends State<HomePage> {
       
     ),
     Product(
-      images: "assets/images/Card.jpg",
+      images: ["assets/images/Card.jpg","assets/images/Card.jpg","assets/images/Card.jpg"],
       time: "yesterday",
       price: 12000,
       decount:16000,
@@ -148,7 +148,7 @@ class _HomePageState extends State<HomePage> {
       
     ),
     Product(
-      images: "assets/images/Card.jpg",
+      images: ["assets/images/Card.jpg","assets/images/Card.jpg","assets/images/Card.jpg"],
       time: "yesterday",
       price: 12000,
       decount:16000,
@@ -672,7 +672,7 @@ class ProductCard extends StatelessWidget {
               ClipRRect(
                 borderRadius:  BorderRadius.circular(12),
                 child: Image.asset(
-                  product.images,
+                  product.images[1],
                   fit: BoxFit.cover,
                   width: double.infinity,
                   height: 165,

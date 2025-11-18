@@ -32,39 +32,39 @@ class _ItemInfoState extends State<ItemInfo> {
           ]),
         ),
         actions: [
-        
-        
-        
-        PopupMenuButton<String>(
-                  color: Colors.white,
-                  onSelected: (value) {
-                    print("You choise: $value");
-                  },
-                  itemBuilder: (context) => [
-                    const PopupMenuItem(value: 'edit', child: Text('Редактировать')),
-                    const PopupMenuItem(value: 'delete', child: Text('Удалить')),
-                    const PopupMenuItem(value: 'share', child: Text('Поделиться')),
-                    const PopupMenuItem(value: 'Add in Favorite', child: Text('Добавить в избранные')),
-                    const PopupMenuItem(value: 'Hide', child: Text('Скрыть')),
-                  ],
-                  child: const Icon(Icons.more_vert), 
-                )
-        
-        
-        ]
-        ,
+          PopupMenuButton<String>(
+            color: Colors.red,
+            onSelected: (value) {
+              print("You choise: $value");
+            },
+            itemBuilder: (context) => [
+              const PopupMenuItem(value: 'edit', child: Text('Редактировать')),
+              const PopupMenuItem(value: 'delete', child: Text('Удалить')),
+              const PopupMenuItem(value: 'share', child: Text('Поделиться')),
+              const PopupMenuItem(value: 'Add in Favorite', child: Text('Добавить в избранные')),
+              const PopupMenuItem(value: 'Hide', child: Text('Скрыть')),
+            ],
+            child: const Icon(Icons.more_vert), 
+          )
+        ],
       ),
       body: 
       SingleChildScrollView(
         child: Column(
-          children: [
-            Container(child:
-              Image.asset(
-                product.images,
-                width: double.infinity,
-                height: 250,
-                fit: BoxFit.cover,
-              ),
+          children: [Column(
+              children: [
+                SizedBox(
+                  height: 250,
+                  child: PageView(
+                    children: product.images.map((img) {
+                      return Image.asset(
+                        img,
+                        fit: BoxFit.cover,
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ]
             ),
             Container(
               padding: EdgeInsets.all(20),
