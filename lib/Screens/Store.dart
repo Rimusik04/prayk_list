@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '/models/item_mod.dart';
+import 'dart:convert';                   
+import 'package:flutter/services.dart';  // ← ДОБАВИЛ: для rootBundle
+// import 'item_mod.dart';     
 import 'package:prayk_list/main.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+
+
 class Store extends StatefulWidget {
   const Store({super.key});
 
@@ -21,32 +26,20 @@ class _StoreState extends State<Store> {
     'assets/images/Banner2.png',
   ];
 
-  final List<Product> products = [
-    Product(
-      name: 'Name of the Company.',
-      image: 'assets/images/Card.jpg',
-      description: 'Stars.',
-    ),
-    Product(
-      name: 'Name of the Company.',
-      image: 'assets/images/Rectangle.png',
-      description: 'Stars.',
-    ),
-    Product(
-      name: 'Name of the Company.',
-      image: 'assets/images/Rectangle.png',
-      description: 'Stars.',
-    ),
-    Product(
-      name: 'Name of the Company.',
-      image: 'assets/images/Rectangle.png',
-      description: 'Stars.',
-    ),
-  ];
+  // final List<Company> products = [
+    
+  // ];
+  late Future<List<Company>> productsFuture; // ← ДОБАВИЛ: Future для загрузки
+  @override
+  void initState() {
+    super.initState();
+    productsFuture = loadProducts();   // ← Я ДОБАВИЛ: теперь Future инициализирован
+  }
 
   void _onNavTapped(int index) {
     setState(() {
       _selectedIndex = index;
+     
     });
 
     if (index == 1) {
@@ -54,6 +47,16 @@ class _StoreState extends State<Store> {
     else if (index == 2) {
     }
   }
+
+  Future<List<Company>> loadProducts() async {     
+    final jsonString = 
+        await rootBundle.loadString('assets/JSON_s/company_json.json'); // ← ЧТЕНИЕ JSON
+
+    final List data = json.decode(jsonString);              // ← Парсинг
+
+    return data.map((e) => Company.fromJson(e)).toList();   // ← Преобразование
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -71,13 +74,15 @@ class _StoreState extends State<Store> {
         ),
       ),
 
-      body:  Center(
-        child: SingleChildScrollView(
+      body: SingleChildScrollView(
           child: Column(
             children: [
               SizedBox(height:10),
               Stack(
                 alignment: Alignment.bottomCenter,children: [            
+                  
+                  
+                  
                   CarouselSlider.builder(
                     itemCount: _banners.length,
                     itemBuilder: (context, index, realIndex) {
@@ -146,25 +151,47 @@ class _StoreState extends State<Store> {
               SizedBox(height:10),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: GridView.builder(
-                  physics: const NeverScrollableScrollPhysics(), 
-                  shrinkWrap: true,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2, // 2 товара в строке
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                    childAspectRatio: 0.7, // пропорции карточек
-                  ),
-                  itemCount: products.length,
-                  itemBuilder: (context, index) {
-                    final product = products[index];
-                    return _buildProductCard(product);
-                  },
-                ),
+                child: 
+
+
+                  FutureBuilder<List<Company>>(           // ← ДОБАВИЛ FutureBuilder
+                    future: productsFuture,
+                    builder: (context, snapshot) {
+                      
+                      
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+
+                      if (snapshot.hasError) {
+                        return Center(child: Text("Ошибка: ${snapshot.error}"));
+                      }
+
+                      if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                        return const Center(child: Text("Нет данных"));
+                      }
+
+                      final company = snapshot.data!;
+
+                        return GridView.builder(
+                        physics: const NeverScrollableScrollPhysics(), 
+                        shrinkWrap: true,
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2, // 2 товара в строке
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                          childAspectRatio: 0.7, // пропорции карточек
+                        ),
+                        itemCount: company.length,
+                        itemBuilder: (context, index) {
+                          return _buildProductCard(company[index]);
+                        },
+                      );
+                    },
+                  )
               ),            
             ],
           ),
-        ),
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
@@ -193,7 +220,7 @@ class _StoreState extends State<Store> {
       ),
     );
   }
-  Widget _buildProductCard(Product product) {
+  Widget _buildProductCard(Company product) {
   return Container(
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(16),
@@ -205,7 +232,6 @@ class _StoreState extends State<Store> {
       ],
     ),
     child: Column(
-      // crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Expanded(
           child: Center(

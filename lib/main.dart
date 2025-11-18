@@ -9,22 +9,16 @@ import 'Screens/item_info.dart';
 
 import 'package:flutter/services.dart' show rootBundle;
 
+final List<Product> products =  [];
+   
 Future<List<Product>> loadProducts() async {
-  final String jsonString = await rootBundle.loadString('assets/JSON_s/product_json.json');//джсон пока не работает 
+  final String jsonString =
+      await rootBundle.loadString('assets/JSON_s/product_json.json');
+
   final List<dynamic> jsonData = json.decode(jsonString);
 
-  return jsonData.map((item) {
-    return Product(
-      images: item['image'],
-      time: item['time'],
-      price: item['price'],
-      decount: item['decount'],
-      description: item['description'],
-    );
-  }).toList();
+  return jsonData.map((item) => Product.fromJson(item)).toList();
 }
-
-
 
 void main() => runApp(const AppBarApp());
 
@@ -81,82 +75,7 @@ class _HomePageState extends State<HomePage> {
   }
     
   
-
-  final List<Product> products =  [
-    Product(
-      images: ["assets/images/Card.jpg","assets/images/Card.jpg","assets/images/Card.jpg"],
-      time: "today",
-      price: 120000,
-      decount:98000,
-      description: "Brand new sweater, size M.",
-      
-    ),
-    Product(
-      images: ["assets/images/Card.jpg","assets/images/Card.jpg","assets/images/Card.jpg"],
-      time: "2 mins ago",
-      price: 1000,
-      decount:800,
-      description: "Sells a new sweater from Qazaq Republic.",
-      
-    ),
-    Product(
-      images: ["assets/images/Card.jpg","assets/images/Card.jpg","assets/images/Card.jpg"],
-      time: "today",
-      price: 12000,
-      decount:10000,
-      description: "Brand new sweater, size M.",
-      
-    ),
-    Product(
-      images: ["assets/images/Card.jpg","assets/images/Card.jpg","assets/images/Card.jpg"],
-      time: "3 years ago",
-      price: 46000,
-      decount:12000,
-      description: "Sells a new sweater from Qazaq Republic.",
-      
-    ),
-    Product(
-      images: ["assets/images/Card.jpg","assets/images/Card.jpg","assets/images/Card.jpg"],
-      time: "yesterday",
-      price: 12000,
-      decount:16000,
-      description: "Sells a new sweater from Qazaq Republic.",
-      
-    ),
-    Product(
-      images: ["assets/images/Card.jpg","assets/images/Card.jpg","assets/images/Card.jpg"],
-      time: "yesterday",
-      price: 12000,
-      decount:16000,
-      description: "Sells a new sweater from Qazaq Republic.",
-      
-    ),
-    Product(
-      images: ["assets/images/Card.jpg","assets/images/Card.jpg","assets/images/Card.jpg"],
-      time: "yesterday",
-      price: 12000,
-      decount:16000,
-      description: "Sells a new sweater from Qazaq Republic.",
-      
-    ),
-    Product(
-      images: ["assets/images/Card.jpg","assets/images/Card.jpg","assets/images/Card.jpg"],
-      time: "yesterday",
-      price: 12000,
-      decount:16000,
-      description: "Sells a new sweater from Qazaq Republic.",
-      
-    ),
-    Product(
-      images: ["assets/images/Card.jpg","assets/images/Card.jpg","assets/images/Card.jpg"],
-      time: "yesterday",
-      price: 12000,
-      decount:16000,
-      description: "Sells a new sweater from Qazaq Republic.",
-      
-    ),
-  ];
-    
+ 
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -193,6 +112,7 @@ class _HomePageState extends State<HomePage> {
       ),
 
       body: SingleChildScrollView(
+        
         child: Column(
           children: [
             // 🔹 Верхний блок с логотипом и поиском
@@ -530,33 +450,47 @@ class _HomePageState extends State<HomePage> {
 
             const SizedBox(height: 10),
 
+            FutureBuilder<List<Product>>(
+              future: productsFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                }
+                if (snapshot.hasError) {
+                  return Center(child: Text("Ошибка загрузки данных"));
+                }
 
-            GridView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              padding: const EdgeInsets.all(10),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2, // 2 по горизонтали
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
-                childAspectRatio: 0.65,
-              ),
-              itemCount: products.length,
-              itemBuilder: (context, index) {
-                final product = products[index];
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ItemInfo(product: product),
-                      ),
+                final products = snapshot.data!; // здесь теперь есть данные
+
+                return GridView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  padding: EdgeInsets.all(10),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                    childAspectRatio: 0.65,
+                  ),
+                  itemCount: products.length,
+                  itemBuilder: (context, index) {
+                    final product = products[index];
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ItemInfo(product: product),
+                          ),
+                        );
+                      },
+                      child: ProductCard(product: product),
                     );
                   },
-                  child: ProductCard(product: product),
                 );
-                        },
-                      ),
+              },
+            )
+
                     ],
                   ),
                 ),
@@ -728,7 +662,7 @@ class ProductCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start, // 🔹 всё влево
                     children:  [
                       SizedBox(height: 5),
-                      Text(product.time),
+                      Text(product.time?? "unknown"),
                       Row(children:[Text(
                         product.price.toString(),
                         style: TextStyle(

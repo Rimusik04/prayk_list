@@ -4,7 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 
 class ItemInfo extends StatefulWidget {
-  final Product product;  // передаем продукт через конструктор
+  final Product product;  
 
   const ItemInfo({super.key, required this.product});
 
@@ -33,7 +33,7 @@ class _ItemInfoState extends State<ItemInfo> {
         ),
         actions: [
           PopupMenuButton<String>(
-            color: Colors.red,
+            color: Colors.white,
             onSelected: (value) {
               print("You choise: $value");
             },
@@ -75,13 +75,15 @@ class _ItemInfoState extends State<ItemInfo> {
                   const SizedBox(height: 8),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
                     children:[
                     Row(
                       children:[
                         Image.asset('assets/images/history.jpg',height: 60,),
                         Column(children: [
-                          Container(width:200,child:Text(product.description)),
+                          Container(
+                            padding: EdgeInsets.only(left: 30),
+                            width:200,child:Text(product.description,maxLines: 2,)
+                          ),
                           Row(children: [
                             SvgPicture.asset('assets/svg/Star.svg', height: 30),               
                             SvgPicture.asset('assets/svg/Star.svg', height: 30),               
@@ -94,7 +96,7 @@ class _ItemInfoState extends State<ItemInfo> {
                     ),
                     ElevatedButton(
                       onPressed: () async {
-
+                        
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.amber,

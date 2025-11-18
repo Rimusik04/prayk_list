@@ -1,62 +1,63 @@
 [
   {
-    "image": "assets/images/Card.jpg",
-    "time": "today",
-    "price": 120000,
-    "decount": 98000,
+    "images": ["assets/images/Card.jpg","assets/images/Card.jpg","assets/images/Card.jpg"],
+    "price": 1200000,
+    "decount": 9000,
+    "time":"2 mins ago",
     "description": "Brand new sweater, size M."
   },
   {
-    "image": "assets/images/Card.jpg",
+    "images": ["assets/images/Card.jpg","assets/images/Card.jpg","assets/images/Card.jpg"],
     "time": "2 mins ago",
     "price": 1000,
     "decount": 800,
     "description": "Sells a new sweater from Qazaq Republic."
   },
   {
-    "image": "assets/images/Card.jpg",
+    "images": ["assets/images/Card.jpg","assets/images/Card.jpg","assets/images/Card.jpg"],
     "time": "today",
     "price": 12000,
     "decount": 10000,
     "description": "Brand new sweater, size M."
   },
   {
-    "image": "assets/images/Card.jpg",
+    "images": ["assets/images/Card.jpg","assets/images/Card.jpg","assets/images/Card.jpg"],
     "time": "3 years ago",
     "price": 46000,
     "decount": 12000,
     "description": "Sells a new sweater from Qazaq Republic."
   },
   {
-    "image": "assets/images/Card.jpg",
+    "images": ["assets/images/Card.jpg","assets/images/Card.jpg","assets/images/Card.jpg"],
     "time": "yesterday",
     "price": 12000,
     "decount": 16000,
     "description": "Sells a new sweater from Qazaq Republic."
   },
   {
-    "image": "assets/images/Card.jpg",
+    "images": ["assets/images/Card.jpg","assets/images/Card.jpg","assets/images/Card.jpg"],
+
     "time": "yesterday",
     "price": 12000,
     "decount": 16000,
     "description": "Sells a new sweater from Qazaq Republic."
   },
   {
-    "image": "assets/images/Card.jpg",
+    "images": ["assets/images/Card.jpg","assets/images/Card.jpg","assets/images/Card.jpg"],
     "time": "yesterday",
     "price": 12000,
     "decount": 16000,
     "description": "Sells a new sweater from Qazaq Republic."
   },
   {
-    "image": "assets/images/Card.jpg",
+    "images": ["assets/images/Card.jpg","assets/images/Card.jpg","assets/images/Card.jpg"],
     "time": "yesterday",
     "price": 12000,
     "decount": 16000,
     "description": "Sells a new sweater from Qazaq Republic."
   },
   {
-    "image": "assets/images/Card.jpg",
+    "images": ["assets/images/Card.jpg","assets/images/Card.jpg","assets/images/Card.jpg"],
     "time": "yesterday",
     "price": 12000,
     "decount": 16000,
